@@ -167,3 +167,4 @@ out.nosync
 bin
 build
 out
+/.idea/
