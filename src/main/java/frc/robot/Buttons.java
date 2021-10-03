@@ -9,5 +9,6 @@ public class Buttons {
 
     Joystick driverControl = new Joystick(0);
     Joystick operatorControl = new Joystick(1);
+    JoystickButton driveAutoAim = new JoystickButton(driverControl, PS4Constants.CIRCLE.getId());
     
 }
