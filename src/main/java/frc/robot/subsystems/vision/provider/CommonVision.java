@@ -1,0 +1,36 @@
+package frc.robot.subsystems.vision.provider;
+
+import frc.robot.subsystems.vision.queryable.Queryable;
+
+import java.util.Optional;
+
+//TODO zoom shit
+public class CommonVision implements Vision {
+
+    private final Queryable limelightTable;
+
+    public CommonVision(Queryable limelightTable) {
+        this.limelightTable = limelightTable;
+    }
+
+    @Override
+    public Optional<Coordinates> getCoordinatesInstant() {
+
+        double x = limelightTable.queryDouble("tX");
+        double y = limelightTable.queryDouble("tY");
+
+        return Optional.of(new Coordinates(x, y));
+    }
+
+
+    @Override
+    public boolean hasValidTarget() {
+        return limelightTable.queryDouble("tV") == 1;
+    }
+
+    @Override
+    public void setLights(boolean enabled) {
+        limelightTable.insertDouble("ledMode", enabled ? 3 : 1); //de-ternary if you want to know what the code does
+
+    }
+}

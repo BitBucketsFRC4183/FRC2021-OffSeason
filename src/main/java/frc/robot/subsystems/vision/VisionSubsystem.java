@@ -1,34 +1,17 @@
 package frc.robot.subsystems.vision;
 
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import java.util.SplittableRandom;
+//no need for an update loop like last year's system since everything is immutable, stateless, and delicious!
+public class VisionSubsystem extends SubsystemBase {
 
-public class VisionSubsystem {
-   private double angle;
-   private double distance;
-   
-    
-   public void initialize(){
-       
-   }
+    //TODO implement whatever needs to be implemented here
+    //there isn't a requirement for any resource provided by Subsystem or SubsystemBase right now
+    //if a caching invalidating implementation of VisionProvider needs a cacheInvalidationLoop. this is where it
+    //will go.
 
-//hi matt it's zak i am sorry for invading ur code
-//if u could write the vision func in a way that returns the angle and dist for me that would be epic 
-   public double getAngle() {
-      angle = 32.0;
-      return angle;
-   }
-   public double getDistance() {
-      distance = 87.0;
-      return distance;
-   }
-
-   //Also temporary, just randomly decides if target exists or not
-   public boolean hasTarget()
-   {
-      return new SplittableRandom().nextInt(2) < 1;
-   }
+    //might need to stick zoom here but since i don't understand the mechanical side of zoom yet i'll hold off implementing it
 
 }
