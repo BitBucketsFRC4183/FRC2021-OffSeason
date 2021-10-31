@@ -14,12 +14,14 @@ public class CommonVision implements Vision {
     }
 
     @Override
-    public Optional<Coordinates> getCoordinatesInstant() {
+    public Coordinates getCoordinates() {
+
+        if (!hasValidTarget()) throw new IllegalStateException("No target!");
 
         double x = limelightTable.queryDouble("tX");
         double y = limelightTable.queryDouble("tY");
 
-        return Optional.of(new Coordinates(x, y));
+        return new Coordinates(x, y);
     }
 
 

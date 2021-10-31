@@ -31,9 +31,10 @@ public interface Vision {
 
     /**
      * Gets the coordinates of any currently locked target
-     * @return the coordinates if present, empty if no target is locked at the instant
+     * @return the coordinates of the last locked on target.
+     * @throws IllegalStateException if nothing is locked onto
      */
-    Optional<Coordinates> getCoordinatesInstant();
+    Coordinates getCoordinates() throws IllegalStateException;
 
     /**
      * Gets whether the vision provider has a target
