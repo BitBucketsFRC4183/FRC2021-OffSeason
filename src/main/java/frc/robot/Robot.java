@@ -1,44 +1,50 @@
 package frc.robot;
 
-import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.subsystems.vision.coordinate.CoordinateDistance;
-import frc.robot.subsystems.vision.provider.CommonVisionProvider;
-import frc.robot.subsystems.vision.provider.Vision;
+import frc.robot.subsystems.BitBucketsSubsystem;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import frc.robot.subsystems.climber.ClimberSubsystem;
+import frc.robot.utils.PS4Constants;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class Robot extends TimedRobot {
 
+    public static final List<BitBucketsSubsystem> robotSubsystems = new ArrayList<>();
+    private final Buttons buttons = new Buttons();
+
+    private ClimberSubsystem climberSubsystem;
+    
     @Override
     public void robotInit() {
 
-        NetworkTableInstance commonInstance = NetworkTableInstance.getDefault(); //in case anyone else requires networktables access
-        commonInstance.startClientTeam(4183);
 
-        Vision vision = new CommonVisionProvider(commonInstance, 0.0).initialize();
-        //do something with the vision """"subsystem"""" (if you need it dependency inject it into your subsystem)
-
-        if (vision.hasValidTarget()) {
-            System.out.println("target acquired - arming salvo");
-        }
-
-        vision.getCoordinatesInstant().ifPresent(coords -> {
-
-            System.out.println(coords.getHorizontalOffset());
-
-            double toTarget = new CoordinateDistance(coords).distance();
-
-            System.out.println(toTarget);
-        });
-
+        climberSubsystem = new ClimberSubsystem();
+        climberSubsystem.initialize();
+        
+        //Initialize all subsystems (do this AFTER subsystem objects are created and instantiated)
+        robotSubsystems.forEach(BitBucketsSubsystem::init);
+        
+        climberSubsystem.setDefaultCommand(new RunCommand(
+        () -> climberSubsystem.moveArms(
+            buttons.operatorControl.getRawAxis(buttons.climbLeftAmnt),
+            buttons.operatorControl.getRawAxis(buttons.climbRightAmnt)),climberSubsystem)
+        );
 
     }
 
     @Override
     public void robotPeriodic() {
-        // always run the CommandScheduler during periodic
+
+        //Run periodic function on all subsystems each time robotPeriodic is called
+        robotSubsystems.forEach(BitBucketsSubsystem::periodic);
+
         CommandScheduler.getInstance().run();
+        climberSubsystem.updateDashboard();
     }
 
     @Override

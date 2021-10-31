@@ -1,5 +1,6 @@
 package frc.robot.subsystems.vision;
 
+
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -13,5 +14,6 @@ public class VisionSubsystem extends SubsystemBase {
     //will go.
 
     //might need to stick zoom here but since i don't understand the mechanical side of zoom yet i'll hold off implementing it
+
 
 }

@@ -65,6 +65,8 @@ dependencies {
     implementation "com.github.Oblarg.Oblog:lib:3.1.2"
 
     testImplementation 'junit:junit:4.12'
+    testImplementation 'org.powermock:powermock-module-junit4:2.0.2'
+    testImplementation 'org.powermock:powermock-api-mockito2:2.0.2'
 
     // we only use this for tests, not for deploying to the robot
     testImplementation 'com.github.cpostbitbuckets.FRCSim:simulator:master-SNAPSHOT'
