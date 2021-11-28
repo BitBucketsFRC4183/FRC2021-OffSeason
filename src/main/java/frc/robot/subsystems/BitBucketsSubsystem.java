@@ -56,7 +56,7 @@ public abstract class BitBucketsSubsystem extends SubsystemBase
     }
 
     //Dashboard Updates
-    protected <T> void updateDashboard(DashboardKey enumKey, T value)
+    protected <T> void setDashboardValue(DashboardKey enumKey, T value)
     {
         if(!this.dashboardConfig.isEnabled(enumKey)) return;
 
@@ -68,6 +68,8 @@ public abstract class BitBucketsSubsystem extends SubsystemBase
         else if(value instanceof Sendable) SmartDashboard.putData(key, (Sendable)value);
     }
 
-    public void updateDashboard() {
+    public void updateDashboard()
+    {
+
     }
 }

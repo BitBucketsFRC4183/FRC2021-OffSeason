@@ -21,7 +21,7 @@ public class ClimberSubsystem extends BitBucketsSubsystem
     private WPI_TalonSRX rightArm;
 
     boolean pit = false;
-    double motorSpeed = 0.1;
+    double motorSpeed = config.climberConfig.MOTOR_SPEED;
     boolean activateClimber = false;
     boolean operatorHolding = false;
     boolean driverHolding = false;
@@ -30,17 +30,14 @@ public class ClimberSubsystem extends BitBucketsSubsystem
 
     @Override
     public void init() {
-       // leftArm = new WPI_TalonSRX(config.LEFT_ARM_MOTOR_ID);
-       // rightArm = new WPI_TalonSRX(config.RIGHT_ARM_MOTOR_ID);
-        // junior motors
-       leftArm = new WPI_TalonSRX(1);
-       rightArm = new WPI_TalonSRX(2);
+       leftArm = new WPI_TalonSRX(config.LEFT_ARM_MOTOR_ID);
+       rightArm = new WPI_TalonSRX(config.RIGHT_ARM_MOTOR_ID);
        rightArm.setInverted(true);
        SmartDashboard.putNumber("climberSubsystem/leftArm", leftArmMoved1);
        SmartDashboard.putNumber("climberSubsystem/rightArm", rightArmMoved1);
 
         SmartDashboard.setDefaultBoolean(this.getName() + "/pitEnabled", false);
-        SmartDashboard.setDefaultNumber(this.getName() + "/motorSpeed", 0.1);
+        SmartDashboard.setDefaultNumber(this.getName() + "/motorSpeed", config.climberConfig.MOTOR_SPEED);
     }
 
     public void moveArms(double leftArmMoved,double rightArmMoved)

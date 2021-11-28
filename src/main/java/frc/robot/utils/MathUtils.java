@@ -26,7 +26,7 @@ public class MathUtils {
   }
 
   /**
-   * Clamps the input between two values.
+   * Clamps the input between two values, then returns the new value.
    * 
    * @param input The number to clamp.
    * @param min   The minium allowed output.

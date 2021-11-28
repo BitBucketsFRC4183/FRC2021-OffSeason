@@ -1,20 +1,20 @@
 package frc.robot.subsystems.vision;
 
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.config.Config;
+import frc.robot.subsystems.BitBucketsSubsystem;
+import frc.robot.utils.DashboardConfig;
 
 import java.util.SplittableRandom;
 
-public class VisionSubsystem {
+public class VisionSubsystem extends BitBucketsSubsystem  {
    private double angle;
    private double distance;
-   
-    
-   public void initialize(){
-       
+
+   public VisionSubsystem(Config config, DashboardConfig dashboardConfig) {
+      super(config, dashboardConfig);
    }
 
-//hi matt it's zak i am sorry for invading ur code
+   //hi matt it's zak i am sorry for invading ur code
 //if u could write the vision func in a way that returns the angle and dist for me that would be epic 
    public double getAngle() {
       angle = 32.0;
@@ -31,4 +31,23 @@ public class VisionSubsystem {
       return new SplittableRandom().nextInt(2) < 1;
    }
 
+   @Override
+   public void init() {
+
+   }
+
+   @Override
+   protected void addMotorsToList() {
+
+   }
+
+   @Override
+   public void periodic() {
+
+   }
+
+   @Override
+   public void disable() {
+
+   }
 }

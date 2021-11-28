@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import frc.robot.config.Config;
 import frc.robot.config.MotorConfig;
+import frc.robot.config.Config.TurretConfig;
 import frc.robot.subsystems.BitBucketsSubsystem;
 import frc.robot.utils.DashboardConfig;
 import frc.robot.utils.MathUtils;
@@ -20,9 +21,6 @@ public class TurretSubsystem extends BitBucketsSubsystem {
     //Class lacks dashboard updates as of right now
     private WPI_TalonSRX elevation;
     private WPI_TalonSRX azimuth;
-    private double azimuthGearRatio = 28.0/130.0;
-    private double elevationGearRatio = 40.0/70.0;
-    private double ticksPerRevolution = 8192.0;
     private int positionSlot = 0;
 
     //PID
@@ -30,6 +28,9 @@ public class TurretSubsystem extends BitBucketsSubsystem {
     private double kI = 0.005;
     private double kD = 10 * 0.14014/4; //10 * kP
     private double kF = 1023.9 / 17300;
+    private double azimuthGearRatio = config.turretConfig.AZIMUTH_GEAR_RATIO;
+    private double elevationGearRatio = config.turretConfig.ELEVATION_GEAR_RATIO;
+    private double ticksPerRevolution = config.turretConfig.TICKS_PER_REVOLUTION;
 
     public void init() {
         elevation = new WPI_TalonSRX(config.ELEVATION_MOTOR_ID);
@@ -50,13 +51,13 @@ public class TurretSubsystem extends BitBucketsSubsystem {
  
     public void setAzimuth(double degrees) {
          double position = degrees / 360.0 / azimuthGearRatio * ticksPerRevolution;
-         MathUtils.clamp(position, -90, 90);
+         position = MathUtils.clamp(position, config.turretConfig.AZIMUTH_CLAMP_MIN_ticks, config.turretConfig.AZIMUTH_CLAMP_MAX_ticks);
          azimuth.set(ControlMode.Position, position);
     }
 
     public void setElevation(double degrees) {
         double position = degrees / 360.0 / elevationGearRatio * ticksPerRevolution;
-        MathUtils.clamp(position, 0, 60); 
+        position = MathUtils.clamp(position, config.turretConfig.ELEVATION_CLAMP_MIN_ticks, config.turretConfig.ELEVATION_CLAMP_MAX_ticks); 
         elevation.set(ControlMode.Position, position);
     }
 
