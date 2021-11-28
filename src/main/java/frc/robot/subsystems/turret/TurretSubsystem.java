@@ -4,9 +4,11 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import frc.robot.config.Config;
+import frc.robot.config.MotorConfig;
 import frc.robot.subsystems.BitBucketsSubsystem;
 import frc.robot.utils.DashboardConfig;
 import frc.robot.utils.MathUtils;
+import frc.robot.utils.MotorUtils;
 
 public class TurretSubsystem extends BitBucketsSubsystem {
     
@@ -21,10 +23,28 @@ public class TurretSubsystem extends BitBucketsSubsystem {
     private double azimuthGearRatio = 28.0/130.0;
     private double elevationGearRatio = 40.0/70.0;
     private double ticksPerRevolution = 8192.0;
+    private int positionSlot = 0;
+
+    //PID
+    private double kP = 0.14014/4;
+    private double kI = 0.005;
+    private double kD = 10 * 0.14014/4; //10 * kP
+    private double kF = 1023.9 / 17300;
 
     public void init() {
         elevation = new WPI_TalonSRX(config.ELEVATION_MOTOR_ID);
+
+        elevation.config_kF(positionSlot, kF);
+        elevation.config_kP(positionSlot, kP);
+        elevation.config_kI(positionSlot, kI);
+        elevation.config_kD(positionSlot, kD);
+
         azimuth = new WPI_TalonSRX(config.AZIMUTH_MOTOR_ID);
+
+        azimuth.config_kF(positionSlot, kF);
+        azimuth.config_kP(positionSlot, kP);
+        azimuth.config_kI(positionSlot, kI);
+        azimuth.config_kD(positionSlot, kF);
     }
 
  
