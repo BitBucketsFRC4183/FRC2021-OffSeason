@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+
 public class Robot extends TimedRobot {
 
     public static final List<BitBucketsSubsystem> robotSubsystems = new ArrayList<>();
@@ -40,7 +41,7 @@ public class Robot extends TimedRobot {
     private TurretSubsystem turretSubsystem;
     private BallManagementSubsystem ballManagementSubsystem;
     private Vision vision;
-    
+
     private ExecutorService smartDashboardThread = Executors.newSingleThreadExecutor();
 
     private boolean disableDash = false;
@@ -48,6 +49,11 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
 
+
+        climberSubsystem = new ClimberSubsystem();
+        climberSubsystem.initialize();
+        
+        //Initialize all subsystems (do this AFTER subsystem objects are created and instantiated)
         this.dashboardConfig = new DashboardConfig();
         this.config = ConfigChooser.GetConfig();
 
