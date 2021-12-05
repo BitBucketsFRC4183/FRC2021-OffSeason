@@ -4,10 +4,12 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import frc.robot.config.Config;
+import frc.robot.config.MotorConfig;
 import frc.robot.config.Config.TurretConfig;
 import frc.robot.subsystems.BitBucketsSubsystem;
 import frc.robot.utils.DashboardConfig;
 import frc.robot.utils.MathUtils;
+import frc.robot.utils.MotorUtils;
 
 public class TurretSubsystem extends BitBucketsSubsystem {
     
@@ -19,13 +21,31 @@ public class TurretSubsystem extends BitBucketsSubsystem {
     //Class lacks dashboard updates as of right now
     private WPI_TalonSRX elevation;
     private WPI_TalonSRX azimuth;
+    private int positionSlot = 0;
+
+    //PID
+    private double kP = 0.14014/4;
+    private double kI = 0.005;
+    private double kD = 10 * 0.14014/4; //10 * kP
+    private double kF = 1023.9 / 17300;
     private double azimuthGearRatio = config.turretConfig.AZIMUTH_GEAR_RATIO;
     private double elevationGearRatio = config.turretConfig.ELEVATION_GEAR_RATIO;
     private double ticksPerRevolution = config.turretConfig.TICKS_PER_REVOLUTION;
 
     public void init() {
         elevation = new WPI_TalonSRX(config.ELEVATION_MOTOR_ID);
+
+        elevation.config_kF(positionSlot, kF);
+        elevation.config_kP(positionSlot, kP);
+        elevation.config_kI(positionSlot, kI);
+        elevation.config_kD(positionSlot, kD);
+
         azimuth = new WPI_TalonSRX(config.AZIMUTH_MOTOR_ID);
+
+        azimuth.config_kF(positionSlot, kF);
+        azimuth.config_kP(positionSlot, kP);
+        azimuth.config_kI(positionSlot, kI);
+        azimuth.config_kD(positionSlot, kF);
     }
 
  

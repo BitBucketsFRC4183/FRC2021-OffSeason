@@ -182,6 +182,12 @@ public class Robot extends TimedRobot {
                     new RunCommand(() -> driveSubsystem.drive(buttons.driverControl.getRawAxis(buttons.driveSpeedAxis),
                             buttons.driverControl.getRawAxis(buttons.driveTurnAxis)), driveSubsystem));
         }
+
+        //Turret
+        if (config.enableTurretSubsytem) {
+            buttons.operatorAimBot.whenPressed(() -> shoot());
+        }
+
             
     
         if (config.enableIntakeSubsytem) {
@@ -238,6 +244,10 @@ public class Robot extends TimedRobot {
             //Both getDistance and elevationConvert are set to record default values.
             //getDistance = 82.0;, elevationConvert = 45.0;
             turretSubsystem.setElevation(turretSubsystem.elevationConvert(new CoordinateDistance(coordinates).distance()));
+        }
+        else {
+            turretSubsystem.setAzimuth(0);
+            turretSubsystem.setElevation(45);
         }
     }
 
