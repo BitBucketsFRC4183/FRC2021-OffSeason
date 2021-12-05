@@ -174,6 +174,11 @@ public class Robot extends TimedRobot {
                             buttons.driverControl.getRawAxis(buttons.driveTurnAxis)), driveSubsystem));
         }
 
+        //Turret
+        if (config.enableTurretSubsytem) {
+            buttons.operatorAimBot.whenPressed(() -> shoot());
+        }
+
     }
 
     @Override
@@ -200,6 +205,10 @@ public class Robot extends TimedRobot {
             //Both getDistance and elevationConvert are set to record default values.
             //getDistance = 82.0;, elevationConvert = 45.0;
             turretSubsystem.setElevation(turretSubsystem.elevationConvert(visionSubsystem.getDistance()));
+        }
+        else {
+            turretSubsystem.setAzimuth(0);
+            turretSubsystem.setElevation(45);
         }
     }
 
