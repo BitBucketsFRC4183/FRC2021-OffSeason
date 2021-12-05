@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -16,6 +17,9 @@ import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.spinnyboi.SpinnyBoiSubsystem;
 import frc.robot.subsystems.turret.TurretSubsystem;
 import frc.robot.subsystems.vision.VisionSubsystem;
+import frc.robot.subsystems.vision.coordinate.CoordinateDistance;
+import frc.robot.subsystems.vision.provider.CommonVisionProvider;
+import frc.robot.subsystems.vision.provider.Vision;
 import frc.robot.utils.DashboardConfig;
 
 import java.util.ArrayList;
@@ -39,7 +43,7 @@ public class Robot extends TimedRobot {
     private SpinnyBoiSubsystem spinnyBoiSubsystem;
     private TurretSubsystem turretSubsystem;
     private BallManagementSubsystem ballManagementSubsystem;
-    private VisionSubsystem visionSubsystem;
+    private Vision vision;
     
     private ScheduledExecutorService smartDashboardThread = Executors.newSingleThreadScheduledExecutor();
 
@@ -90,7 +94,7 @@ public class Robot extends TimedRobot {
         }
 
         if(config.enableVisionSubsytem) {
-            robotSubsystems.add(visionSubsystem = new VisionSubsystem(config, dashboardConfig));
+            vision = new CommonVisionProvider(NetworkTableInstance.getDefault(), 0).initialize();
         }
 
         // Initialize all subsystems (do this AFTER subsystem objects are created and
@@ -155,11 +159,16 @@ public class Robot extends TimedRobot {
                     shooterSubsystem.stopShooter();
                 else
                 {
-                    if(!this.visionSubsystem.hasTarget())
+                    if(!vision.hasValidTarget())
                         shooterSubsystem.spinShooter(ShooterCalculator.DEFAULT_SPEED);
                     else
                     {
-                        double targetRPM = this.shooterCalculator.getRPM(this.visionSubsystem.getDistance(), this.visionSubsystem.getAngle());
+                        Vision.Coordinates coordinates = vision.getCoordinates();
+
+                        double targetRPM = this.shooterCalculator.getRPM(
+                                new CoordinateDistance(coordinates).distance(),
+                                coordinates.getHorizontalAngle() //Zak do you want horizontal or vertical angle
+                        );
                         this.shooterSubsystem.spinShooter(targetRPM);
                     }
                 }
@@ -170,7 +179,7 @@ public class Robot extends TimedRobot {
         // Drive
         if (config.enableDriveSubsytem) {
             driveSubsystem.setDefaultCommand(
-                    new RunCommand(() -> DriveSubsystem.drive(buttons.driverControl.getRawAxis(buttons.driveSpeedAxis),
+                    new RunCommand(() -> driveSubsystem.drive(buttons.driverControl.getRawAxis(buttons.driveSpeedAxis),
                             buttons.driverControl.getRawAxis(buttons.driveTurnAxis)), driveSubsystem));
         }
 
@@ -179,6 +188,34 @@ public class Robot extends TimedRobot {
             buttons.operatorAimBot.whenPressed(() -> shoot());
         }
 
+            
+    
+        if (config.enableIntakeSubsytem) {
+            buttons.operatorIntakeIn
+                .whenPressed(() -> {
+                    intakeSubsystem.spinForward();
+            })
+                .whenReleased(() -> {
+                    intakeSubsystem.stopSpinning();
+                })
+            ;
+        
+
+            buttons.operatorIntakeOut
+                .whenPressed(() -> {
+                    intakeSubsystem.spinBackward();
+                })
+                .whenReleased(() -> {
+                    intakeSubsystem.stopSpinning();
+                })
+            ;
+
+            buttons.operatorToggleIntake
+                .whenPressed(() -> {
+                    intakeSubsystem.toggle();
+                })
+            ;
+        }
     }
 
     @Override
@@ -200,11 +237,13 @@ public class Robot extends TimedRobot {
     }
 
     public void shoot() {
-        if (visionSubsystem.hasTarget() == true) {
-            turretSubsystem.setAzimuth(visionSubsystem.getAngle());
+        if (vision.hasValidTarget()) {
+            Vision.Coordinates coordinates = vision.getCoordinates();
+
+            turretSubsystem.setAzimuth(coordinates.getHorizontalAngle());
             //Both getDistance and elevationConvert are set to record default values.
             //getDistance = 82.0;, elevationConvert = 45.0;
-            turretSubsystem.setElevation(turretSubsystem.elevationConvert(visionSubsystem.getDistance()));
+            turretSubsystem.setElevation(turretSubsystem.elevationConvert(new CoordinateDistance(coordinates).distance()));
         }
         else {
             turretSubsystem.setAzimuth(0);

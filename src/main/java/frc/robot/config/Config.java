@@ -17,14 +17,14 @@ public class Config {
 
   //////////////////////////////////////////////////////////////////////////////
   // Subsystem Enablers
-  public boolean enableBallManagementSubsytem = true;
-  public boolean enableClimberSubsytem = true;
+  public boolean enableBallManagementSubsytem = false;
+  public boolean enableClimberSubsytem = false;
   public boolean enableDriveSubsytem = true;
-  public boolean enableIntakeSubsytem = true;
-  public boolean enableShooterSubsytem = true;
-  public boolean enableSpinnyboiSubsytem = true;
-  public boolean enableTurretSubsytem = true;
-  public boolean enableVisionSubsytem = true;
+  public boolean enableIntakeSubsytem = false;
+  public boolean enableShooterSubsytem = false;
+  public boolean enableSpinnyboiSubsytem = false;
+  public boolean enableTurretSubsytem = false;
+  public boolean enableVisionSubsytem = false;
 
   //////////////////////////////////////////////////////////////////////////////
   // Motor IDs
@@ -37,8 +37,8 @@ public class Config {
   public int RIGHT_ARM_MOTOR_ID = 8;
 
   // Drive Subsystem
-  public int RIGHT_DRIVE_LEADER_ID = 1;
-  public int LEFT_DRIVE_LEADER_ID = 2;
+  public int RIGHT_DRIVE_LEADER_ID = 2;
+  public int LEFT_DRIVE_LEADER_ID = 1;
   public int RIGHT_DRIVE_FOLLOWER_ID = 3;
   public int LEFT_DRIVE_FOLLOWER_ID = 4;
 

@@ -1,4 +1,5 @@
 package frc.robot.subsystems.drive;
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -24,7 +25,17 @@ public class DriveSubsystem extends BitBucketsSubsystem{
         rightDriveFollower = new WPI_TalonSRX(config.RIGHT_DRIVE_FOLLOWER_ID);
         leftDriveFollower = new WPI_TalonSRX(config.LEFT_DRIVE_FOLLOWER_ID);
 
-        DifferentialDrive m_drive = new DifferentialDrive(leftDriveLeader, rightDriveLeader);
+        //rightDriveLeader.setInverted(true);
+        
+        rightDriveFollower.follow(rightDriveLeader);
+        leftDriveFollower.follow(leftDriveLeader);
+
+        //DifferentialDrive m_drive = new DifferentialDrive(leftDriveLeader, rightDriveLeader);
+    }
+
+    public void prevent(double leftStick, double rightStick){
+        leftStick = Math.abs(leftStick);
+        rightStick = Math.abs(rightStick);
     }
     @Override
     protected void addMotorsToList() {
@@ -41,8 +52,11 @@ public class DriveSubsystem extends BitBucketsSubsystem{
         // TODO Auto-generated method stub
         
     }
-    public static Object drive(double rawAxis, double rawAxis2) {
-        return null;
+    double slowdown = 0.5;
+    public void drive(double speed, double turn) {
+
+        leftDriveLeader.set(ControlMode.PercentOutput, (speed + turn) * slowdown);
+        rightDriveLeader.set(ControlMode.PercentOutput, (speed - turn) * -1 * slowdown);
     }
     
 

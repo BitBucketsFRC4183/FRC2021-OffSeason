@@ -39,8 +39,8 @@ public class Buttons {
     JoystickButton operatorToggleIntake = new JoystickButton(operatorControl, PS4Constants.R1.getId());
 
     JoystickButton setElevationToDashboardNum = new JoystickButton(operatorControl, PS4Constants.OPTIONS.getId());
-    public int driveSpeedAxis;
-    public int driveTurnAxis;
+    public int driveSpeedAxis = PS4Constants.LEFT_STICK_Y.getId();
+    public int driveTurnAxis = PS4Constants.RIGHT_STICK_X.getId();
     JoystickButton operatorClimbActivated = new JoystickButton(operatorControl, PS4Constants.PS4.getId());
     JoystickButton driverClimbActivated = new JoystickButton(driverControl, PS4Constants.PS4.getId());
 }
